@@ -1,0 +1,260 @@
+dc: http://purl.org/dc/elements/1.1/
+owl: http://www.w3.org/2002/07/owl#
+rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+rdfs: http://www.w3.org/2000/01/rdf-schema#
+sioc: http://rdfs.org/sioc/ns#
+sc: http://lab.gsi.dit.upm.es/scraping.rdf#
+vu: http://vulneranet.org/vulneranet.owl#
+omelette: http://www.ict-omelette.eu/schema.rdf#
+ctag: http://commontag.org/ns#
+rosm: http://www.wsmo.org/ns/rosm/0.1#
+hrests: http://www.wsmo.org/ns/hrests#
+
+# Home page
+*:
+  rdf:type: sc:Fragment
+  sc:selector:
+    *:
+      rdf:type: sc:UriSelector
+      rdf:value: "http://pipes.yahoo.com/pipes/"
+  sc:subfragment:
+    *:
+      rdf:type: sc:Fragment
+      sc:type: sc:Index
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "a.navlink"
+          sc:keyword: "browse"
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+
+# Popular pipes page
+*:
+  rdf:type: sc:Fragment
+  sc:selector:
+    *:
+      rdf:type: sc:UriSelector
+      rdf:value: "http://pipes.yahoo.com/pipes/pipes.popular"
+  sc:subfragment:
+    *:
+      rdf:type: sc:Fragment
+      sc:type: sc:Page
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "#mTagstoptags a"
+      sc:identifier:
+        *:
+          rdf:type: sc:NewUriSelector
+          sc:prefix: "http://pipes.yahoo.com/pipes/search?r=tag:"
+          sc:follow: "true"
+          sc:downcase: "true"
+
+# Any index page
+*:
+  rdf:type: sc:Fragment
+  sc:selector:
+    *:
+      rdf:type: sc:UriSelector
+      rdf:value:
+        "http://pipes.yahoo.com/pipes/pipes.popular"
+        "http://pipes.yahoo.com/pipes/search"
+  sc:subfragment:
+    *:
+      rdf:type: sc:Fragment
+      sc:type: omelette:Service
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "li.pipelistli"
+      sc:identifier:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "h3 a"
+          sc:attribute: "href"
+      sc:subfragment:
+        *:
+          rdf:type: sc:Fragment
+          sc:relation: omelette:dataFormat
+          sc:type: rdf:Literal
+          sc:selector:
+            *:
+              rdf:type: sc:CssSelector
+              rdf:value: "li.first"
+              sc:keyword: "formats:"
+              sc:selector:
+                *:
+                  rdf:type: sc:XPathSelector
+                  rdf:value: "./../li[@class='tag']/a"
+    *:
+      rdf:type: sc:Fragment
+      sc:type: sc:Page
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: ".paginate a"
+          sc:keyword: "next >"
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+
+# Yahoo Pipe
+*:
+  rdf:type: sc:Fragment
+  sc:type: omelette:Service
+  sc:selector:
+    *:
+      rdf:type: sc:UriPatternSelector
+      rdf:value: "http://pipes.yahoo.com/pipes/pipe.info?_id=*"
+  sc:identifier:
+    *:
+      rdf:type: sc:BaseUriSelector
+  sc:subfragment:
+    *:
+      rdf:type: sc:Fragment
+      sc:relation: rdfs:label
+      sc:type: rdf:Literal
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "h1.title"
+    *:
+      rdf:type: sc:Fragment
+      sc:relation: dc:description
+      sc:type: rdf:Literal
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: ".bd .desc"
+
+    *:
+      rdf:type: sc:Fragment
+      sc:relation: ctag:tagged
+      sc:type: ctag:Tag
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "#mTagstoptags a"
+      sc:identifier:
+        *:
+          rdf:type: sc:NewUriSelector
+          sc:prefix: "http://www.ict-omelette.eu/omr/tags/"
+          sc:downcase: "true"
+      sc:subfragment:
+        *:
+          rdf:type: sc:Fragment
+          sc:type: rdf:Literal
+          sc:relation: rdfs:label
+          sc:selector:
+            *:
+              rdf:type: sc:RootSelector
+
+    *:
+      rdf:type: sc:Fragment
+      sc:relation: omelette:uses
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "#mSourcestoptags a"
+      sc:identifier:
+        *:
+          rdf:type: sc:NewUriSelector
+          sc:prefix: "http://"
+          sc:downcase: "true"
+
+    *:
+      rdf:type: sc:Fragment
+      sc:relation: omelette:uses
+      sc:type: omelette:Service
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "#mModulestoptags a"
+      sc:identifier:
+        *:
+          rdf:type: sc:NewUriSelector
+          sc:prefix: "http://www.ict-omelette.eu/omr/operator/"
+          sc:downcase: "true"
+      sc:subfragment:
+        *:
+          rdf:type: sc:Fragment
+          sc:type: rdf:Literal
+          sc:relation: rdfs:label
+          sc:selector:
+            *:
+              rdf:type: sc:RootSelector
+    *:
+      rdf:type: sc:Fragment
+      sc:relation:
+        omelette:endpoint
+        dc:source
+      sc:selector:
+        *:
+          rdf:type: sc:RootSelector
+      sc:identifier:
+        *:
+          rdf:type: sc:BaseUriSelector
+
+    *:
+      rdf:type: sc:Fragment
+      sc:relation: omelette:describedBy
+      sc:type: rosm:Service
+      sc:selector:
+        *:
+          rdf:type: sc:RootSelector
+      sc:subfragment:
+        *:
+          rdf:type: sc:Fragment
+          sc:relation: rosm:supportsOperation
+          sc:type: rosm:Operation
+          sc:selector:
+            *:
+              rdf:type: sc:RootSelector
+          sc:subfragment:
+            *:
+              rdf:type: sc:Fragment
+              sc:relation: hrests:hasAddress
+              sc:selector:
+                *:
+                  rdf:type: sc:BaseUriSelector
+              sc:identifier:
+                *:
+                  rdf:type: sc:NewUriSelector
+                  sc:suffix: "&_render=rss"
+            *:
+              rdf:type: sc:Fragment
+              sc:relation: rosm:requestURIParameter
+              sc:selector:
+                *:
+                  rdf:type: sc:CssSelector
+                  rdf:value: "#runform table input[@type!='submit']"
+              sc:subfragment:
+                *:
+                  rdf:type: sc:Fragment
+                  sc:relation: rdfs:label
+                  sc:type: rdf:Literal
+                  sc:selector:
+                    *:
+                      rdf:type: sc:RootSelector
+                      sc:attribute: "name"
+                *:
+                  rdf:type: sc:Fragment
+                  sc:relation: ctag:tagged
+                  sc:selector:
+                    *:
+                      rdf:type: sc:RootSelector
+                      sc:attribute: "type"
+                  sc:subfragment:
+                    *:
+                      rdf:type: sc:Fragment
+                      sc:type: rdf:Literal
+                      sc:relation: rdfs:label
+                      sc:selector:
+                        *:
+                          rdf:type: sc:RootSelector
+                          sc:attribute: "type"
+

@@ -7,7 +7,7 @@ require 'mechanize'
 require 'ostruct'
 require 'active_support'
 require 'tmpdir'
-require 'lightrdf'
+require '../lightrdf/lib/lightrdf.rb'
 
 Namespace :sc, 'http://lab.gsi.dit.upm.es/scraping.rdf#'
 

@@ -5,12 +5,15 @@ sioc: http://rdfs.org/sioc/ns#
 sc: http://lab.gsi.dit.upm.es/scraping.rdf#
 loc: http://www.daml.org/experiment/ontology/location-ont#
 
-_:elmundoindice:
+_:larazonindice:
   rdf:type: sc:Fragment
   sc:selector:
     *:
       rdf:type: sc:UriSelector
-      rdf:value: "http://www.elmundo.es/"
+      rdf:value: "http://www.larazon.es/"
+    *:
+      rdf:type: sc:UriSelector
+      rdf:value: "http://larazon.es/"
   sc:identifier:
     *:
       rdf:type: sc:BaseUriSelector
@@ -19,8 +22,8 @@ _:elmundoindice:
       sc:type: sioc:Post
       sc:selector:
         *:
-          rdf:type: sc:CssSelector
-          rdf:value: ".noticia h2, .noticia h3, .noticia h4"
+          rdf:type: sc:XPathSelector
+          rdf:value: "#sort1 li .noticias_destacadas .noticia [1] .titulo_destacado,#sort1 li .noticias_destacadas .noticia [2] .titulo_destacado,#sort2 li .noticias_destacadas .noticia [1] .titulo_destacado,#sort2 li .noticias_destacadas .noticia [2] .titulo_destacado"
       sc:identifier:
         *:
           rdf:type: sc:CssSelector
@@ -35,13 +38,16 @@ _:elmundoindice:
               rdf:type:  sc:CssSelector
               rdf:value: "a"
 
-_:elmundonoticia:
+_:larazonnoticia:
   rdf:type: sc:Fragment
   sc:type: sioc:Post
   sc:selector:
     *:
       rdf:type: sc:UriPatternSelector
-      rdf:value: "http://www.elmundo.es/*"
+      rdf:value: "http://www.larazon.es/*"
+    *:
+      rdf:type: sc:UriPatternSelector
+      rdf:value: "http://larazon.es/*"
   sc:identifier:
     *:
       rdf:type: sc:BaseUriSelector
@@ -52,65 +58,74 @@ _:elmundonoticia:
       sc:selector:
         *:
           rdf:type: sc:CssSelector
-          rdf:value: ".noticia .firma em"
+          rdf:value: ".txt .fecha"
+          sc:selector:
+            *:
+              rdf:type: sc:SliceSelector
+              rdf:value: "-"
+              sc:index:  "2"
     *:
       sc:type:     rdf:Literal
       sc:relation: dc:title
       sc:selector:
         *:
           rdf:type:  sc:CssSelector
-          rdf:value: ".noticia h2"
+          rdf:value: ".noticia .txt h2"
     *:
       sc:type:     loc:Location
       sc:relation: loc:location
       sc:selector:
         *:
-          rdf:type:  sc:CssSelector
-          rdf:value: ".noticia .firma .localizacion"
+          rdf:type: sc:CssSelector          
+          rdf:value: ".txt .fecha"         
       sc:subfragment:
         *:
           sc:type:      rdf:Literal
           sc:relation: rdf:label
           sc:selector:
             *:
-              rdf:type:  sc:RootSelector
+              rdf:type:  sc:RootSelector              
+              sc:type: rdf:Literal
+              sc:selector:
+                *:
+                  rdf:type: sc:SliceSelector
+                  rdf:value: "-"
+                  sc:index:  "1"
     *:
       sc:type:     rdf:Literal
       sc:relation: dc:date
       sc:selector:
         *:
-          rdf:type:  sc:CssSelector
-          rdf:value: ".metadata_noticia .fecha"
+          rdf:type: sc:CssSelector
+          rdf:value: ".txt .fecha"
+          sc:selector:
+            *:
+              rdf:type: sc:SliceSelector
+              rdf:value: "-"
+              sc:index:  "0"
     *:
       sc:type:     rdf:Literal
-      sc:relation: dc:comment
+      sc:relation: dc:description
       sc:selector:
         *:
           rdf:type:  sc:CssSelector
-          rdf:value: ".comenta span"
+          rdf:value: ".txt .cintillo"
     *:
       sc:type:     rdf:Literal
       sc:relation: dc:category
       sc:selector:
         *:
           rdf:type:  sc:CssSelector
-          rdf:value: "#cabecera .seccion"
+          rdf:value: ".list_busqueda span a"
     *:
       sc:type:     rdf:Literal
-      sc:relation: dc:subcategory
-      sc:selector:
-        *:
-          rdf:type:  sc:CssSelector
-          rdf:value: ".antetitulo .seccion a"
-    *:
-      sc:type:     rdf:Literal
-      sc:relation: dc:description
+      sc:relation: dc:comment
       sc:selector:
         *:
           rdf:type: sc:CssSelector
-          rdf:value: ".contenido_noticia_01 .antetitulo"
+          rdf:value: ".num-comentarios-izq a [2]"
           sc:selector:
             *:
               rdf:type: sc:SliceSelector
-              rdf:value: "|"
-              sc:index:  "1"
+              rdf:value: " "
+              sc:index:  "0"

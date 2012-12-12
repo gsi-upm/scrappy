@@ -5,12 +5,12 @@ sioc: http://rdfs.org/sioc/ns#
 sc: http://lab.gsi.dit.upm.es/scraping.rdf#
 loc: http://www.daml.org/experiment/ontology/location-ont#
 
-_:elmundoindice:
+_:abcindice:
   rdf:type: sc:Fragment
   sc:selector:
     *:
       rdf:type: sc:UriSelector
-      rdf:value: "http://www.elmundo.es/"
+      rdf:value: "http://www.abc.es/"
   sc:identifier:
     *:
       rdf:type: sc:BaseUriSelector
@@ -20,7 +20,7 @@ _:elmundoindice:
       sc:selector:
         *:
           rdf:type: sc:CssSelector
-          rdf:value: ".noticia h2, .noticia h3, .noticia h4"
+          rdf:value: ".colA h3, .colB h3"
       sc:identifier:
         *:
           rdf:type: sc:CssSelector
@@ -35,13 +35,13 @@ _:elmundoindice:
               rdf:type:  sc:CssSelector
               rdf:value: "a"
 
-_:elmundonoticia:
+_:abcnoticia:
   rdf:type: sc:Fragment
   sc:type: sioc:Post
   sc:selector:
     *:
       rdf:type: sc:UriPatternSelector
-      rdf:value: "http://www.elmundo.es/*"
+      rdf:value: "http://www.abc.es/*"
   sc:identifier:
     *:
       rdf:type: sc:BaseUriSelector
@@ -52,21 +52,26 @@ _:elmundonoticia:
       sc:selector:
         *:
           rdf:type: sc:CssSelector
-          rdf:value: ".noticia .firma em"
+          rdf:value: ".datosi .author span [1]"
+          sc:selector:
+            *:
+              rdf:type: sc:SliceSelector
+              rdf:value: "/"
+              sc:index:  "0"
     *:
       sc:type:     rdf:Literal
       sc:relation: dc:title
       sc:selector:
         *:
           rdf:type:  sc:CssSelector
-          rdf:value: ".noticia h2"
+          rdf:value: ".doc .headline a"
     *:
       sc:type:     loc:Location
       sc:relation: loc:location
       sc:selector:
         *:
           rdf:type:  sc:CssSelector
-          rdf:value: ".noticia .firma .localizacion"
+          rdf:value: ".datosi .lugar"
       sc:subfragment:
         *:
           sc:type:      rdf:Literal
@@ -79,38 +84,30 @@ _:elmundonoticia:
       sc:relation: dc:date
       sc:selector:
         *:
-          rdf:type:  sc:CssSelector
-          rdf:value: ".metadata_noticia .fecha"
-    *:
-      sc:type:     rdf:Literal
-      sc:relation: dc:comment
-      sc:selector:
-        *:
-          rdf:type:  sc:CssSelector
-          rdf:value: ".comenta span"
+          rdf:type: sc:CssSelector
+          rdf:value: ".datosi .date"
+          sc:selector:
+            *:
+              rdf:type: sc:SliceSelector
+              rdf:value: "-"
+              sc:index:  "0"
+              sc:type: rdf:Literal
+              sc:selector:
+                *:
+                  rdf:type: sc:SliceSelector
+                  rdf:value: " "
+                  sc:index:  "1"
     *:
       sc:type:     rdf:Literal
       sc:relation: dc:category
       sc:selector:
         *:
           rdf:type:  sc:CssSelector
-          rdf:value: "#cabecera .seccion"
-    *:
-      sc:type:     rdf:Literal
-      sc:relation: dc:subcategory
-      sc:selector:
-        *:
-          rdf:type:  sc:CssSelector
-          rdf:value: ".antetitulo .seccion a"
+          rdf:value: "#nav .nav2 h2 .activo"
     *:
       sc:type:     rdf:Literal
       sc:relation: dc:description
       sc:selector:
         *:
-          rdf:type: sc:CssSelector
-          rdf:value: ".contenido_noticia_01 .antetitulo"
-          sc:selector:
-            *:
-              rdf:type: sc:SliceSelector
-              rdf:value: "|"
-              sc:index:  "1"
+          rdf:type:  sc:CssSelector
+          rdf:value: ".colA .subt h3"

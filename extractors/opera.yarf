@@ -1,0 +1,162 @@
+dc: http://purl.org/dc/elements/1.1/
+owl: http://www.w3.org/2002/07/owl#
+rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+rdfs: http://www.w3.org/2000/01/rdf-schema#
+sioc: http://rdfs.org/sioc/ns#
+sc: http://lab.gsi.dit.upm.es/scraping.rdf#
+vu: http://vulneranet.org/vulneranet.owl#
+omelette: http://www.ict-omelette.eu/schema.rdf#
+ctag: http://commontag.org/ns#
+skos: http://www.w3.org/2004/02/skos/core#
+
+# Main page
+*:
+  rdf:type: sc:Fragment
+  sc:selector:
+    *:
+      rdf:type: sc:UriSelector
+      rdf:value: "http://widgets.opera.com/"
+  sc:subfragment:
+    *:
+      sc:type: sc:Page
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "a"
+          sc:keyword: "all categories..."
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+
+# Categories page
+*:
+  rdf:type: sc:Fragment
+  sc:selector:
+    *:
+      rdf:type: sc:UriSelector
+      rdf:value: "http://widgets.opera.com/category/"
+  sc:subfragment:
+    *:
+      sc:type: sc:Index
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "#catlist .list li a"
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+
+# Single category page
+*:
+  rdf:type: sc:Fragment
+  sc:selector:
+    *:
+      rdf:type: sc:UriPatternSelector
+      rdf:value: "http://widgets.opera.com/category/*"
+  sc:subfragment:
+    *:
+      sc:type: sc:Index
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: ".info ul#blocks li a.title"
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+    *:
+      sc:type: sc:Page
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "a"
+          sc:keyword: "next »"
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+
+# Widget page
+*:
+  rdf:type: sc:Fragment
+  sc:type: omelette:Widget
+  sc:selector:
+    *:
+      rdf:type: sc:UriPatternSelector
+      rdf:value: "http://widgets.opera.com/widget/*"
+  sc:identifier:
+    *:
+      rdf:type: sc:BaseUriSelector
+  sc:subfragment:
+    *:
+      sc:type: rdf:Literal
+      sc:relation: rdfs:label
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: ".title h2"
+    *:
+      sc:relation: dc:source
+      sc:selector:
+        *:
+          rdf:type: sc:RootSelector
+      sc:identifier:
+        *:
+          rdf:type: sc:BaseUriSelector
+    *:
+      sc:relation: omelette:categorizedBy
+      sc:type: skos:Concept
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "#topnav a.navlink"
+          sc:index: "1"
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+      sc:subfragment:
+        *:
+          sc:type: rdf:Literal
+          sc:relation: rdfs:label
+          sc:selector:
+            *:
+              rdf:type: sc:RootSelector
+    *:
+      sc:type: rdf:Literal
+      sc:relation: dc:description
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "#long-description"
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+    *:
+      sc:relation: omelette:endpoint
+      sc:selector:
+        *:
+          rdf:type: sc:CssSelector
+          rdf:value: "a.on"
+      sc:identifier:
+        *:
+          rdf:type: sc:RootSelector
+          sc:attribute: "href"
+          sc:selector:
+            *:
+              rdf:type: sc:SliceSelector
+              rdf:value: "/download"
+              sc:index: "1"
+              sc:selector:
+                *:
+                  rdf:type: sc:SliceSelector
+                  rdf:value: "?"
+                  sc:index: "0"
+                  sc:selector:
+                    *:
+                      rdf:type: sc:NewUriSelector
+                      sc:prefix: "http://widgets.opera.com/widget/download/force"
+
